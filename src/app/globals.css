@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Typography ───────────────────────────────────── */
+  --font-sans: var(--font-inter), Inter, Arial, Helvetica, sans-serif;
+
+  /* ── Brand palette ────────────────────────────────── */
+  --color-navy-900: #061426;
+  --color-navy-800: #081a2f;
+  --color-navy-700: #102235;
+  --color-steel: #152b40;
+  --color-white-soft: #f3f4f6;
+  --color-muted: #aab7c8;
+  --color-cyan: #00c2ff;
+  --color-cyan-2: #12e6ff;
+  --color-emerald: #00e5a8;
+
+  /* ── Semantic / component tokens ─────────────────── */
+  --color-border-glow: rgba(0, 194, 255, 0.18);
+  --color-glow: rgba(0, 194, 255, 0.45);
+
+  /* ── Radius ───────────────────────────────────────── */
+  --radius-card: 18px;
+  --radius-btn: 12px;
+}
+
+/* ─── Reset ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-navy-900);
+  color: var(--color-white-soft);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ─── Page background (full-page gradient) ──────────── */
+.gradient-page {
+  background:
+    radial-gradient(circle at 75% 35%, rgba(0, 194, 255, 0.18), transparent 28%),
+    radial-gradient(circle at 15% 10%, rgba(0, 229, 168, 0.1), transparent 25%),
+    linear-gradient(135deg, #061426 0%, #081a2f 48%, #102235 100%);
+}
+
+/* ─── Gradient text helpers ─────────────────────────── */
+.gradient-text-cyan {
+  background: linear-gradient(90deg, var(--color-cyan), #0077ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-brand {
+  background: linear-gradient(135deg, #071b4d 0%, #0c2b78 42%, #006fff 76%, #00c2ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Logo arrow ────────────────────────────────────── */
+.logo-arrow-line {
+  position: absolute;
+  background: linear-gradient(90deg, #0077ff, #00e5a8);
+  border-radius: 999px;
+  box-shadow: 0 0 16px rgba(0, 229, 168, 0.35);
+}
+
+/* ─── Nav link states ───────────────────────────────── */
+.nav-link-active,
+.nav-link:hover {
+  color: #00c2ff;
+}
+
+/* ─── Data-wave dot grid ────────────────────────────── */
+.data-wave {
+  background-image: radial-gradient(
+    circle,
+    rgba(0, 194, 255, 0.72) 1px,
+    transparent 1.5px
+  );
+  background-size: 18px 18px;
+  mask-image: linear-gradient(to top, black, transparent);
+  -webkit-mask-image: linear-gradient(to top, black, transparent);
+  transform: perspective(450px) rotateX(62deg);
+}
