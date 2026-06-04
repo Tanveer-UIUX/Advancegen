@@ -1,9 +1,10 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import TrustBar from "@/components/TrustBar";
-import Services from "@/components/Services";
-import ComingSoonSection from "@/components/ComingSoonSection";
-import { COMING_SOON_SECTIONS } from "@/lib/constants";
+import SolutionsSection from "@/components/SolutionsSection";
+import UseCasesSection from "@/components/UseCasesSection";
+import HowItWorksSection from "@/components/HowItWorksSection";
+import WhoWeAreSection from "@/components/WhoWeAreSection";
+import LetsTalkSection from "@/components/LetsTalkSection";
 
 export default function Home() {
   return (
@@ -11,11 +12,11 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <TrustBar />
-        <Services />
-        {COMING_SOON_SECTIONS.map(({ id, label }) => (
-          <ComingSoonSection key={id} id={id} label={label} />
-        ))}
+        <SolutionsSection />
+        <UseCasesSection />
+        <HowItWorksSection />
+        <WhoWeAreSection />
+        <LetsTalkSection />
       </main>
     </div>
   );

@@ -2,17 +2,22 @@
 
 @theme {
   /* ── Typography ───────────────────────────────────── */
-  --font-sans: var(--font-inter), Inter, Arial, Helvetica, sans-serif;
+  --font-sans:
+    var(--font-dm-sans), var(--font-inter), "DM Sans", Arial, Helvetica, sans-serif;
+  --font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
 
   /* ── Brand palette ────────────────────────────────── */
-  --color-navy-900: #061426;
-  --color-navy-800: #081a2f;
+  --color-navy-900: #08131f;
+  --color-navy-800: #08131f;
   --color-navy-700: #102235;
   --color-steel: #152b40;
+  --color-surface: #102235;
+  --color-surface-2: #152b40;
   --color-white-soft: #f3f4f6;
-  --color-muted: #aab7c8;
+  --color-muted: #a8b8c8;
+  --color-muted-2: #5a7a94;
   --color-cyan: #00c2ff;
-  --color-cyan-2: #12e6ff;
+  --color-cyan-2: #00c2ff;
   --color-emerald: #00e5a8;
 
   /* ── Semantic / component tokens ─────────────────── */
@@ -96,4 +101,114 @@ a {
   mask-image: linear-gradient(to top, black, transparent);
   -webkit-mask-image: linear-gradient(to top, black, transparent);
   transform: perspective(450px) rotateX(62deg);
+}
+
+/* ─── Display / serif font helper ───────────────────── */
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* ─── Tab navigation ─────────────────────────────────── */
+.nav-tabs-bar {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-top: 1px solid rgba(0, 194, 255, 0.08);
+}
+.nav-tabs-bar::-webkit-scrollbar {
+  display: none;
+}
+.nav-tab {
+  flex: 1;
+  min-width: 80px;
+  padding: 10px 6px;
+  font-size: 11.5px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--color-muted-2);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-tab:hover {
+  color: var(--color-white-soft);
+}
+.nav-tab.active {
+  color: var(--color-cyan);
+  border-bottom-color: var(--color-cyan);
+}
+
+/* ─── Scroll progress bar ────────────────────────────── */
+.scroll-progress-track {
+  height: 2px;
+  background: var(--color-surface-2);
+}
+.scroll-progress-fill {
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-cyan), var(--color-emerald));
+  transition: width 0.1s linear;
+}
+
+/* ─── Hero grid lines overlay ────────────────────────── */
+.hero-grid-lines {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 194, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 194, 255, 0.03) 1px, transparent 1px);
+  background-size: 56px 56px;
+  pointer-events: none;
+}
+
+/* ─── Section label chip ─────────────────────────────── */
+.section-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-cyan);
+  margin-bottom: 16px;
+  display: block;
+}
+
+/* ─── Heading italic accent ──────────────────────────── */
+.heading-italic {
+  font-style: italic;
+  color: var(--color-cyan);
+}
+
+/* ─── Ambient orbs ───────────────────────────────────── */
+@keyframes drift1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-60px, 80px) scale(1.1);
+  }
+}
+@keyframes drift2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(80px, -60px) scale(0.9);
+  }
+}
+.orb-1 {
+  animation: drift1 25s ease-in-out infinite;
+}
+.orb-2 {
+  animation: drift2 30s ease-in-out infinite;
 }

@@ -1,9 +1,10 @@
 export const NAV_LINKS = [
   { label: "Home", href: "#home" },
-  { label: "Services", href: "#services" },
   { label: "Solutions", href: "#solutions" },
-  { label: "About Us", href: "#about" },
-  { label: "Resources", href: "#resources" },
+  { label: "Use Cases", href: "#use-cases" },
+  { label: "How It Works", href: "#how-it-works" },
+  { label: "Who We Are", href: "#who-we-are" },
+  { label: "Let's Talk", href: "#contact" },
 ] as const;
 
 export const TRUST_COMPANIES = [
