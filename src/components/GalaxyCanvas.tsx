@@ -2,281 +2,148 @@
 
 import { useEffect, useRef } from "react";
 
-/* ── types ─────────────────────────────────────────── */
-interface Star {
-  x: number;
-  y: number;
-  r: number;
-  phase: number;
-  speed: number;
-  color: string;
-  drift: number;
-  driftFreq: number;
-}
-
-interface Nebula {
-  x: number;
-  y: number;
-  rx: number;
-  ry: number;
-  color: string;
-  opacity: number;
-}
-
-interface Shooter {
+interface Node {
   x: number;
   y: number;
   vx: number;
   vy: number;
-  len: number;
-  opacity: number;
-  active: boolean;
+  r: number;
+  color: "cyan" | "em";
+}
+interface Pulse {
+  ax: number;
+  ay: number;
+  bx: number;
+  by: number;
+  t: number;
+  speed: number;
+  color: "cyan" | "em";
 }
 
-/* ── constants ──────────────────────────────────────── */
-const STAR_COLORS = [
-  "255,255,255",
-  "180,220,255",
-  "0,194,255",
-  "18,230,255",
-  "0,229,168",
-];
-const COLS = 58;
-const ROWS = 22;
+const CYAN = "rgba(0,194,255,";
+const EM = "rgba(0,229,168,";
 
-/* ── builders ───────────────────────────────────────── */
-function mkStars(w: number, h: number): Star[] {
-  return Array.from({ length: 180 }, () => ({
-    x: Math.random() * w,
-    y: Math.random() * h * 0.72,
-    r: Math.random() * 1.5 + 0.3,
-    phase: Math.random() * Math.PI * 2,
-    speed: Math.random() * 0.007 + 0.002,
-    color: STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)],
-    drift: (Math.random() - 0.5) * 0.05,
-    driftFreq: Math.random() * 0.003 + 0.001,
-  }));
-}
-
-function mkNebulae(w: number, h: number): Nebula[] {
-  return [
-    { x: w * 0.75, y: h * 0.32, rx: 340, ry: 260, color: "0,194,255", opacity: 0.08 },
-    { x: w * 0.15, y: h * 0.18, rx: 270, ry: 200, color: "0,229,168", opacity: 0.055 },
-    { x: w * 0.5, y: h * 0.55, rx: 360, ry: 180, color: "0,100,255", opacity: 0.065 },
-    { x: w * 0.88, y: h * 0.6, rx: 200, ry: 170, color: "18,230,255", opacity: 0.042 },
-  ];
-}
-
-function mkShooters(): Shooter[] {
-  return Array.from({ length: 5 }, () => ({
-    x: 0,
-    y: 0,
-    vx: 0,
-    vy: 0,
-    len: 0,
-    opacity: 0,
-    active: false,
-  }));
-}
-
-/* ── component ──────────────────────────────────────── */
 export default function GalaxyCanvas() {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (window.innerWidth < 1024) return;
-
     const canvas = ref.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let raf: number;
-    let t = 0;
-    let nextShot = 80 + Math.random() * 120;
+    let animId: number;
+    let nodes: Node[] = [];
+    let pulses: Pulse[] = [];
+    let pulseTimer = 0;
 
     const resize = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
     };
-    resize();
 
-    let stars = mkStars(canvas.width, canvas.height);
-    let nebulae = mkNebulae(canvas.width, canvas.height);
-    const shooters = mkShooters();
-
-    /* ── nebula ────────────────────────────────────── */
-    const drawNebulae = (w: number, h: number) => {
-      nebulae.forEach((n) => {
-        ctx.save();
-        ctx.scale(1, n.ry / n.rx);
-        const g = ctx.createRadialGradient(
-          n.x,
-          n.y * (n.rx / n.ry),
-          0,
-          n.x,
-          n.y * (n.rx / n.ry),
-          n.rx,
-        );
-        g.addColorStop(0, `rgba(${n.color},${n.opacity})`);
-        g.addColorStop(0.5, `rgba(${n.color},${n.opacity * 0.35})`);
-        g.addColorStop(1, `rgba(${n.color},0)`);
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(n.x, n.y * (n.rx / n.ry), n.rx, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-      });
-      void h; // suppress unused
+    const initNodes = () => {
+      const W = canvas.width,
+        H = canvas.height;
+      let count = Math.floor((W * H) / 18000);
+      count = Math.max(20, Math.min(50, count));
+      nodes = Array.from({ length: count }, () => ({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: Math.random() * 2 + 1.5,
+        color: Math.random() > 0.5 ? "cyan" : "em",
+      })) as Node[];
     };
 
-    /* ── stars ─────────────────────────────────────── */
-    const drawStars = () => {
-      stars.forEach((s) => {
-        s.x += s.drift * Math.sin(t * s.driftFreq);
-        const op = 0.3 + 0.7 * Math.abs(Math.sin(t * s.speed + s.phase));
-
-        if (s.r > 1.1) {
-          const g = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 5);
-          g.addColorStop(0, `rgba(${s.color},${op * 0.55})`);
-          g.addColorStop(1, `rgba(${s.color},0)`);
-          ctx.fillStyle = g;
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r * 5, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
-        ctx.fillStyle = `rgba(${s.color},${op})`;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fill();
+    const spawnPulse = () => {
+      if (nodes.length < 2) return;
+      const a = nodes[Math.floor(Math.random() * nodes.length)];
+      const b = nodes[Math.floor(Math.random() * nodes.length)];
+      if (a === b) return;
+      const dx = b.x - a.x,
+        dy = b.y - a.y;
+      if (Math.sqrt(dx * dx + dy * dy) > 180) return;
+      pulses.push({
+        ax: a.x,
+        ay: a.y,
+        bx: b.x,
+        by: b.y,
+        t: 0,
+        speed: 0.012 + Math.random() * 0.008,
+        color: Math.random() > 0.5 ? "cyan" : "em",
       });
     };
 
-    /* ── shooting stars ─────────────────────────────── */
-    const spawnShooter = () => {
-      const s = shooters.find((sh) => !sh.active);
-      if (!s) return;
-      const angle = (-(20 + Math.random() * 15) * Math.PI) / 180;
-      s.x = Math.random() * canvas.width * 0.55;
-      s.y = Math.random() * canvas.height * 0.35;
-      s.vx = Math.cos(angle) * (7 + Math.random() * 6);
-      s.vy = Math.sin(angle) * (7 + Math.random() * 6);
-      s.len = 110 + Math.random() * 80;
-      s.opacity = 1;
-      s.active = true;
-    };
-
-    const drawShooters = () => {
-      shooters.forEach((s) => {
-        if (!s.active) return;
-        s.x += s.vx;
-        s.y += s.vy;
-        s.opacity -= 0.016;
-        if (s.opacity <= 0 || s.x > canvas.width || s.y > canvas.height) {
-          s.active = false;
-          return;
-        }
-        const tx = s.x - (s.vx / Math.hypot(s.vx, s.vy)) * s.len;
-        const ty = s.y - (s.vy / Math.hypot(s.vx, s.vy)) * s.len;
-        const g = ctx.createLinearGradient(tx, ty, s.x, s.y);
-        g.addColorStop(0, `rgba(0,229,168,0)`);
-        g.addColorStop(0.6, `rgba(0,194,255,${s.opacity * 0.5})`);
-        g.addColorStop(1, `rgba(255,255,255,${s.opacity})`);
-        ctx.strokeStyle = g;
-        ctx.lineWidth = 1.6;
-        ctx.beginPath();
-        ctx.moveTo(tx, ty);
-        ctx.lineTo(s.x, s.y);
-        ctx.stroke();
-      });
-    };
-
-    /* ── 3-D perspective particle wave ─────────────── */
-    const drawWave = (w: number, h: number) => {
-      const waveH = h * 0.44; // vertical space the wave occupies
-      const baseY = h + 10; // bottom anchor
-      const marginX = w * 0.05;
-
-      for (let row = 0; row < ROWS; row++) {
-        const depth = row / (ROWS - 1); // 0 = closest, 1 = farthest
-        const invD = 1 - depth;
-        const scaleX = 0.28 + invD * 0.72; // wider at front
-        const scaleY = invD;
-
-        const rowY = baseY - depth * waveH;
-
-        for (let col = 0; col < COLS; col++) {
-          const cx = col / (COLS - 1);
-
-          // wave height: layered sines for organic feel
-          const wh =
-            Math.sin(cx * 6.8 + depth * 3.2 - t * 0.038) * 0.55 +
-            Math.sin(cx * 12.0 - depth * 2.1 + t * 0.028) * 0.25 +
-            Math.cos(cx * 4.2 + depth * 5.0 - t * 0.022) * 0.2;
-
-          // screen position
-          const sx = marginX + (w - marginX * 2) * (0.5 + (cx - 0.5) * scaleX);
-          const sy = rowY - wh * waveH * 0.28 * scaleY;
-
-          // size + opacity
-          const dotR = 0.35 + invD * 1.65;
-          const bright = 0.3 + 0.7 * Math.max(0, wh);
-          const op = (0.18 + invD * 0.55) * (0.5 + bright * 0.5);
-
-          // color: cyan → blue based on depth
-          const r = Math.round(0 + depth * 0);
-          const g = Math.round(130 + bright * 100);
-          const b = Math.round(200 + bright * 55);
-
-          // glow at crests
-          if (wh > 0.55 && invD > 0.35) {
-            const gw = ctx.createRadialGradient(sx, sy, 0, sx, sy, dotR * 5);
-            gw.addColorStop(0, `rgba(${r},${g},${b},${op * 0.7})`);
-            gw.addColorStop(1, `rgba(${r},${g},${b},0)`);
-            ctx.fillStyle = gw;
-            ctx.beginPath();
-            ctx.arc(sx, sy, dotR * 5, 0, Math.PI * 2);
-            ctx.fill();
-          }
-
-          ctx.fillStyle = `rgba(${r},${g},${b},${op})`;
-          ctx.beginPath();
-          ctx.arc(sx, sy, dotR, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-    };
-
-    /* ── main loop ──────────────────────────────────── */
     const draw = () => {
-      const { width: w, height: h } = canvas;
-      ctx.clearRect(0, 0, w, h);
-
-      drawNebulae(w, h);
-      drawStars();
-      drawShooters();
-      drawWave(w, h);
-
-      t++;
-      if (t >= nextShot) {
-        spawnShooter();
-        nextShot = t + 90 + Math.random() * 150;
+      const W = canvas.width,
+        H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x,
+            dy = nodes[i].y - nodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 140) {
+            const alpha = (1 - dist / 140) * 0.18;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.strokeStyle = CYAN + alpha + ")";
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
       }
-
-      raf = requestAnimationFrame(draw);
+      nodes.forEach((n) => {
+        const c = n.color === "cyan" ? CYAN : EM;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r * 3, 0, Math.PI * 2);
+        ctx.fillStyle = c + "0.05)";
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = c + "0.8)";
+        ctx.fill();
+      });
+      pulses = pulses.filter((p) => {
+        p.t += p.speed;
+        if (p.t > 1) return false;
+        const x = p.ax + (p.bx - p.ax) * p.t,
+          y = p.ay + (p.by - p.ay) * p.t;
+        const c = p.color === "cyan" ? CYAN : EM;
+        const alpha = p.t < 0.5 ? p.t * 2 : 2 - p.t * 2;
+        ctx.beginPath();
+        ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = c + alpha + ")";
+        ctx.fill();
+        return true;
+      });
+      nodes.forEach((n) => {
+        n.x += n.vx;
+        n.y += n.vy;
+        if (n.x < 0 || n.x > W) n.vx *= -1;
+        if (n.y < 0 || n.y > H) n.vy *= -1;
+      });
+      pulseTimer++;
+      if (pulseTimer % 80 === 0) spawnPulse();
+      if (pulseTimer % 120 === 0) spawnPulse();
+      animId = requestAnimationFrame(draw);
     };
 
+    resize();
+    initNodes();
+    draw();
     const onResize = () => {
+      cancelAnimationFrame(animId);
       resize();
-      stars = mkStars(canvas.width, canvas.height);
-      nebulae = mkNebulae(canvas.width, canvas.height);
+      initNodes();
+      draw();
     };
-
     window.addEventListener("resize", onResize);
-    raf = requestAnimationFrame(draw);
     return () => {
-      cancelAnimationFrame(raf);
+      cancelAnimationFrame(animId);
       window.removeEventListener("resize", onResize);
     };
   }, []);
@@ -285,7 +152,7 @@ export default function GalaxyCanvas() {
     <canvas
       ref={ref}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block"
+      className="pointer-events-none absolute inset-0 h-full w-full"
     />
   );
 }

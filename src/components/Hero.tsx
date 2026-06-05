@@ -1,5 +1,6 @@
 import GalaxyCanvas from "./GalaxyCanvas";
 import HeroDashboard from "./HeroDashboard";
+import SwiftUpHeading from "./SwiftUpHeading";
 
 export default function Hero() {
   return (
@@ -8,16 +9,9 @@ export default function Hero() {
       <div className="hero-grid-lines" />
 
       <div className="mx-auto grid min-h-140 w-full max-w-[1000px] grid-cols-1 items-center gap-10 px-7 pt-16 pb-14 lg:grid-cols-2 lg:gap-14">
-        {/* Left — copy */}
         <div className="relative z-10">
           <span className="section-label">AI-powered business intelligence</span>
-
-          <h1 className="font-display text-white-soft text-[clamp(32px,4.2vw,54px)] leading-[1.1] font-semibold tracking-[-0.025em]">
-            Intelligence That{" "}
-            <em className="heading-italic not-italic">Makes Things Easy</em> in Your
-            Business
-          </h1>
-
+          <SwiftUpHeading />
           <p className="text-muted mt-5 max-w-[500px] text-[17px] leading-[1.75] font-light">
             Stop managing chaos.{" "}
             <strong className="text-white-soft font-medium">
@@ -28,7 +22,6 @@ export default function Hero() {
           </p>
         </div>
 
-        {/* Right — dashboard visual */}
         <div
           className="relative z-10 flex items-center justify-center pt-4 pb-4 lg:pt-0 lg:pb-0"
           aria-hidden="true"

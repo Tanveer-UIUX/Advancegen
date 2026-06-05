@@ -5,6 +5,7 @@ import UseCasesSection from "@/components/UseCasesSection";
 import HowItWorksSection from "@/components/HowItWorksSection";
 import WhoWeAreSection from "@/components/WhoWeAreSection";
 import LetsTalkSection from "@/components/LetsTalkSection";
+import SectionDivider from "@/components/SectionDivider";
 
 export default function Home() {
   return (
@@ -12,10 +13,15 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <SectionDivider />
         <SolutionsSection />
+        <SectionDivider />
         <UseCasesSection />
+        <SectionDivider />
         <HowItWorksSection />
+        <SectionDivider />
         <WhoWeAreSection />
+        <SectionDivider />
         <LetsTalkSection />
       </main>
     </div>

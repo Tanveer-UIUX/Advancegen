@@ -21,10 +21,7 @@ const ICON_MAP: Record<string, LucideIcon> = {
 
 export default function TrustBar() {
   return (
-    <section
-      aria-label="Trusted companies"
-      className="border-t border-b border-white/[0.07] bg-white/[0.025]"
-    >
+    <section aria-label="Trusted companies" className="section-sep-both bg-white/[0.025]">
       <div className="mx-auto flex w-full max-w-375 flex-col gap-4 pt-4 pr-6 pb-4 pl-6 min-[1150px]:min-h-16 min-[1150px]:flex-row min-[1150px]:items-center min-[1150px]:justify-between min-[1150px]:gap-20 min-[1150px]:pt-0 min-[1150px]:pb-0 lg:pr-15 lg:pl-15">
         <span className="text-white-soft/40 shrink-0 text-[11px] font-semibold tracking-[1.5px] uppercase">
           Trusted by innovative companies

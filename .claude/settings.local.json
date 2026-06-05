@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat /Users/adeelbutt/Downloads/Advancegen_Final_v2.html | head -200)",
+      "Bash(python3 -c ' *)",
+      "Bash(pandoc /Users/adeelbutt/Downloads/Advancegen_Complete_Draft.docx -o /tmp/advancegen_content.md)"
+    ]
+  }
+}
