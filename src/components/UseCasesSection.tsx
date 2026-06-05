@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
+import ScrollReveal from "./ScrollReveal";
 
 const USE_CASES = [
   {
@@ -92,167 +93,174 @@ export default function UseCasesSection() {
   const tagColor = TAG_COLORS[uc.tag] ?? "#00C2FF";
 
   return (
-    <section id="use-cases" className="border-t border-white/[0.07]">
+    <section id="use-cases" className="">
       <div className="mx-auto max-w-[1000px] px-7 py-20">
         {/* intro */}
-        <div className="mb-12">
+        <ScrollReveal className="mb-12 text-center">
           <span className="section-label">Use Cases</span>
-          <h2 className="font-display text-white-soft max-w-[560px] text-[clamp(28px,3.6vw,44px)] leading-[1.15] font-semibold tracking-[-0.02em]">
+          <h2 className="font-display text-white-soft mx-auto max-w-[560px] text-[clamp(28px,3.6vw,44px)] leading-[1.15] font-semibold tracking-[-0.02em]">
             Most businesses don&apos;t have a problem.{" "}
             <em className="heading-italic">They have an undiagnosed one.</em>
           </h2>
-          <p className="text-muted mt-4 max-w-[520px] text-[15px] leading-[1.75]">
+          <p className="text-muted mx-auto mt-4 max-w-[500px] text-[15px] leading-[1.75]">
             The missed calls, the unpaid invoices, the overwhelmed team — these
             aren&apos;t just operational headaches. They&apos;re symptoms of processes
             that were never properly examined.
           </p>
-        </div>
+        </ScrollReveal>
 
         {/* main panel */}
-        <div
-          className="flex flex-col overflow-hidden rounded-[20px] lg:flex-row"
-          style={{ border: "1px solid rgba(0,194,255,0.12)" }}
-        >
-          {/* left: item list */}
+        <ScrollReveal delay={120}>
           <div
-            className="flex shrink-0 flex-col lg:w-[272px]"
-            style={{
-              background: "#0d1e2e",
-              borderRight: "1px solid rgba(0,194,255,0.08)",
-            }}
+            className="flex flex-col overflow-hidden rounded-[20px] lg:flex-row"
+            style={{ border: "1px solid rgba(0,194,255,0.12)" }}
           >
-            {USE_CASES.map((item, i) => {
-              const isActive = i === active;
-              return (
-                <button
-                  key={i}
-                  onClick={() => setActive(i)}
-                  className="flex flex-col items-start gap-1.5 px-5 py-4 text-left transition-colors duration-150"
-                  style={{
-                    background: isActive ? "rgba(0,194,255,0.07)" : "transparent",
-                    borderLeft: isActive ? "2px solid #00C2FF" : "2px solid transparent",
-                    borderBottom: "1px solid rgba(0,194,255,0.06)",
-                  }}
-                >
-                  <div className="flex w-full items-center justify-between">
-                    <span
-                      className="text-[10px] font-bold tabular-nums"
-                      style={{ color: isActive ? "#00C2FF" : "#5A7A94" }}
-                    >
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                    <span
-                      className="rounded-full px-2 py-0.5 text-[9px] font-semibold tracking-wide uppercase"
-                      style={{
-                        color: TAG_COLORS[item.tag] ?? "#00C2FF",
-                        background: `${TAG_COLORS[item.tag] ?? "#00C2FF"}18`,
-                      }}
-                    >
-                      {item.tag}
-                    </span>
-                  </div>
-                  <span
-                    className="text-[13px] leading-snug font-medium"
-                    style={{ color: isActive ? "#F3F4F6" : "#A8B8C8" }}
-                  >
-                    {item.title}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* right: detail */}
-          <div
-            className="flex flex-1 flex-col p-7 lg:p-8"
-            style={{ background: "#102235" }}
-          >
-            {/* tag + title */}
-            <div className="mb-6">
-              <span
-                className="mb-3 inline-block rounded-full px-3 py-1 text-[10px] font-semibold tracking-widest uppercase"
-                style={{ color: tagColor, background: `${tagColor}18` }}
-              >
-                {uc.tag}
-              </span>
-              <h3
-                className="font-display text-[clamp(20px,2.4vw,28px)] leading-snug font-semibold"
-                style={{ color: "#F3F4F6" }}
-              >
-                {uc.title}
-              </h3>
-            </div>
-
-            {/* problem */}
-            <div className="mb-5">
-              <div className="mb-2 flex items-center gap-2">
-                <span
-                  className="h-1.5 w-1.5 shrink-0 rounded-full"
-                  style={{ background: "#FF6B6B" }}
-                />
-                <span
-                  className="text-[10px] font-bold tracking-widest uppercase"
-                  style={{ color: "#FF6B6B" }}
-                >
-                  The Problem
-                </span>
-              </div>
-              <p
-                className="pl-3.5 text-[14px] leading-[1.75]"
-                style={{
-                  color: "#A8B8C8",
-                  borderLeft: "2px solid rgba(255,107,107,0.25)",
-                }}
-              >
-                {uc.problem}
-              </p>
-            </div>
-
-            {/* solution */}
-            <div className="mb-6">
-              <div className="mb-2 flex items-center gap-2">
-                <span
-                  className="h-1.5 w-1.5 shrink-0 rounded-full"
-                  style={{ background: "#00E5A8" }}
-                />
-                <span
-                  className="text-[10px] font-bold tracking-widest uppercase"
-                  style={{ color: "#00E5A8" }}
-                >
-                  Our Solution
-                </span>
-              </div>
-              <p
-                className="pl-3.5 text-[14px] leading-[1.75]"
-                style={{ color: "#A8B8C8", borderLeft: "2px solid rgba(0,229,168,0.25)" }}
-              >
-                {uc.solution}
-              </p>
-            </div>
-
-            {/* result */}
+            {/* left: item list */}
             <div
-              className="mt-auto flex items-start gap-3 rounded-[12px] px-5 py-4"
+              className="flex shrink-0 flex-col lg:w-[272px]"
               style={{
-                background: "rgba(0,229,168,0.06)",
-                border: "1px solid rgba(0,229,168,0.15)",
+                background: "#0d1e2e",
+                borderRight: "1px solid rgba(0,194,255,0.08)",
               }}
             >
-              <span
-                className="mt-0.5 text-[16px] leading-none"
-                style={{ color: "#00E5A8" }}
+              {USE_CASES.map((item, i) => {
+                const isActive = i === active;
+                return (
+                  <button
+                    key={i}
+                    onClick={() => setActive(i)}
+                    className="flex flex-col items-start gap-1.5 px-5 py-4 text-left transition-colors duration-150"
+                    style={{
+                      background: isActive ? "rgba(0,194,255,0.07)" : "transparent",
+                      borderLeft: isActive
+                        ? "2px solid #00C2FF"
+                        : "2px solid transparent",
+                      borderBottom: "1px solid rgba(0,194,255,0.06)",
+                    }}
+                  >
+                    <div className="flex w-full items-center justify-between">
+                      <span
+                        className="text-[10px] font-bold tabular-nums"
+                        style={{ color: isActive ? "#00C2FF" : "#5A7A94" }}
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span
+                        className="rounded-full px-2 py-0.5 text-[9px] font-semibold tracking-wide uppercase"
+                        style={{
+                          color: TAG_COLORS[item.tag] ?? "#00C2FF",
+                          background: `${TAG_COLORS[item.tag] ?? "#00C2FF"}18`,
+                        }}
+                      >
+                        {item.tag}
+                      </span>
+                    </div>
+                    <span
+                      className="text-[13px] leading-snug font-medium"
+                      style={{ color: isActive ? "#F3F4F6" : "#A8B8C8" }}
+                    >
+                      {item.title}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* right: detail */}
+            <div
+              className="flex flex-1 flex-col p-7 lg:p-8"
+              style={{ background: "#102235" }}
+            >
+              {/* tag + title */}
+              <div className="mb-6">
+                <span
+                  className="mb-3 inline-block rounded-full px-3 py-1 text-[10px] font-semibold tracking-widest uppercase"
+                  style={{ color: tagColor, background: `${tagColor}18` }}
+                >
+                  {uc.tag}
+                </span>
+                <h3
+                  className="font-display text-[clamp(20px,2.4vw,28px)] leading-snug font-semibold"
+                  style={{ color: "#F3F4F6" }}
+                >
+                  {uc.title}
+                </h3>
+              </div>
+
+              {/* problem */}
+              <div className="mb-5">
+                <div className="mb-2 flex items-center gap-2">
+                  <span
+                    className="h-1.5 w-1.5 shrink-0 rounded-full"
+                    style={{ background: "#FF6B6B" }}
+                  />
+                  <span
+                    className="text-[10px] font-bold tracking-widest uppercase"
+                    style={{ color: "#FF6B6B" }}
+                  >
+                    The Problem
+                  </span>
+                </div>
+                <p
+                  className="pl-3.5 text-[14px] leading-[1.75]"
+                  style={{
+                    color: "#A8B8C8",
+                    borderLeft: "2px solid rgba(255,107,107,0.25)",
+                  }}
+                >
+                  {uc.problem}
+                </p>
+              </div>
+
+              {/* solution */}
+              <div className="mb-6">
+                <div className="mb-2 flex items-center gap-2">
+                  <span
+                    className="h-1.5 w-1.5 shrink-0 rounded-full"
+                    style={{ background: "#00E5A8" }}
+                  />
+                  <span
+                    className="text-[10px] font-bold tracking-widest uppercase"
+                    style={{ color: "#00E5A8" }}
+                  >
+                    Our Solution
+                  </span>
+                </div>
+                <p
+                  className="pl-3.5 text-[14px] leading-[1.75]"
+                  style={{
+                    color: "#A8B8C8",
+                    borderLeft: "2px solid rgba(0,229,168,0.25)",
+                  }}
+                >
+                  {uc.solution}
+                </p>
+              </div>
+
+              {/* result */}
+              <div
+                className="mt-auto flex items-start gap-3 rounded-[12px] px-5 py-4"
+                style={{
+                  background: "rgba(0,229,168,0.06)",
+                  border: "1px solid rgba(0,229,168,0.15)",
+                }}
               >
-                ✦
-              </span>
-              <p
-                className="text-[13px] leading-relaxed font-medium"
-                style={{ color: "#00E5A8" }}
-              >
-                {uc.result}
-              </p>
+                <span
+                  className="mt-0.5 text-[16px] leading-none"
+                  style={{ color: "#00E5A8" }}
+                >
+                  ✦
+                </span>
+                <p
+                  className="text-[13px] leading-relaxed font-medium"
+                  style={{ color: "#00E5A8" }}
+                >
+                  {uc.result}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
 
         {/* bottom CTA */}
         <div

@@ -7,7 +7,7 @@ interface ComingSoonSectionProps {
 
 export default function ComingSoonSection({ id, label }: ComingSoonSectionProps) {
   return (
-    <section id={id} className="scroll-mt-22 border-t border-white/[0.07]">
+    <section id={id} className="scroll-mt-22">
       <div className="mx-auto flex min-h-105 w-full max-w-375 flex-col items-center justify-center gap-6 pt-20 pr-6 pb-20 pl-6 text-center lg:pr-15 lg:pl-15">
         <div className="border-border-glow bg-steel/40 text-cyan flex h-16 w-16 items-center justify-center rounded-2xl border">
           <Clock className="h-8 w-8" strokeWidth={1.5} />
